@@ -11,7 +11,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.instance
 
 # Import database and models
 from models import db, User
-db.create_all()
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
 
 
 @app.route('/')
