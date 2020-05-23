@@ -1,1 +1,1 @@
-web: gunicorn -b :$PORT --pythonpath flask app:app
+web: gunicorn app_runner:app
