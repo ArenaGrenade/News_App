@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, flash
 from flask_sqlalchemy import SQLAlchemy
 import os
 
@@ -17,6 +17,42 @@ db.create_all()
 def homepage():
     return render_template("index.html");
 
+
+@app.route('/register', methods=('GET', 'POST'))
+def register():
+    flag = None
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        email = request.form['email']
+        flag = None
+
+        if username is None:
+            flag = 'Username is required.'
+        elif password is None:
+            flag = 'Password is required.'
+        elif User.query.filter_by(username=username).first():
+            flag = 'Username must be unique'
+        elif User.query.filter_by(email=email).first():
+            flag = 'Email is already registered'
+        else:
+            user = User(
+                firstname=request.form['firstname'],
+                lastname=request.form['lastname'],
+                email=request.form['email'],
+                username=request.form['username'],
+                password=request.form['password']
+            )
+            db.session.add(user)
+            db.session.commit()
+            print('committed')
+            # return redirect(url_for('login'))
+            return render_template('auth/register.html')
+    
+    if flag:
+        flash(flag)
+        print(flag)
+    return render_template('auth/register.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
