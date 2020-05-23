@@ -1,6 +1,7 @@
-import application
+from application import create_app
+
+instance = create_app()
 
 
 if __name__ == '__main__':
-    instance = application.create_app()
     instance.run()
