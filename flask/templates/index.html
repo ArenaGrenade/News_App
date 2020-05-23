@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>A simple three.js Web Page</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=PT+Mono&display=swap');
+        body { margin: 0; overflow: hidden;}
+        #overlay {
+            background-color: transparent;
+            color: white;
+            font-size: 110px;
+            width: 100%;
+            height: 100px;
+            position: absolute;
+            top: 20%;
+            text-align: center;
+            font-family: 'PT Mono', monospace;
+            opacity: 0%;
+        }
+    </style>
+</head>
+<body>
+    <div id="overlay">HELLO</div>
+    <script src="{{ url_for('static', filename='JS/three.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='JS/3d_scene.js') }}"></script>
+</body>
+</html>
