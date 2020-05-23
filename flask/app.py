@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import os
 
@@ -46,12 +46,12 @@ def register():
             db.session.add(user)
             db.session.commit()
             print('committed')
-            # return redirect(url_for('login'))
-            return render_template('auth/register.html')
+            return redirect(url_for('register'))  # Must redirect to login instead
     
     if flag:
         flash(flag)
         print(flag)
+
     return render_template('auth/register.html')
 
 if __name__ == '__main__':
