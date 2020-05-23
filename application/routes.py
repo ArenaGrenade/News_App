@@ -1,23 +1,8 @@
-<<<<<<< HEAD:application/routes.py
 from flask import request, render_template, redirect, flash, url_for, session, g
 from flask import current_app as app
 from .models import db, User
 from werkzeug.security import check_password_hash
-=======
-from flask import Flask, render_template, request, flash, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
-import os
 
-
-app = Flask(__name__)
-app.secret_key = 'test'  # app.secret_key = 'a26d9e7eff0d4dba88d35458034c57b1'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.instance_path, '../dbase.sqlite')
-
-
-# Import database and models
-from models import db, User
-db.create_all()
->>>>>>> parent of f0d0497... Login:flask/app.py
 
 
 @app.route('/')
@@ -53,20 +38,7 @@ def register():
             db.session.add(user)
             db.session.commit()
             print('committed')
-<<<<<<< HEAD:application/routes.py
-            return redirect(url_for('login'))
 
-=======
-            return redirect(url_for('register'))  # Must redirect to login instead
-    
->>>>>>> parent of f0d0497... Login:flask/app.py
-    if flag:
-        flash(flag)
-        print(flag)
-
-    return render_template('auth/register.html')
-
-<<<<<<< HEAD:application/routes.py
 
 @app.route('/login', methods=('GET', 'POST'))
 def login():
@@ -103,7 +75,3 @@ def things_to_do():
         g.user = user
         print('user set')
         print(user)
-=======
-if __name__ == '__main__':
-    app.run(debug=True)
->>>>>>> parent of f0d0497... Login:flask/app.py
