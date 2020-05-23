@@ -15,11 +15,6 @@ db.create_all()
 
 @app.route('/')
 def homepage():
-    user = User(firstname='Abhishekh', lastname='Sivakumar', username='abhishekh', password='Test', email='abhishekh@gmail.com')
-    db.session.add(user)
-    db.session.commit()
-
-    print(User.query.all())
     return render_template("index.html");
 
 
