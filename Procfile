@@ -1,1 +1,1 @@
-web: gunicorn app_runner:app
+web: gunicorn app_runner:instance
