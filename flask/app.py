@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for, session, g
+from werkzeug.security import check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 import os
 
@@ -46,13 +47,51 @@ def register():
             db.session.add(user)
             db.session.commit()
             print('committed')
-            return redirect(url_for('register'))  # Must redirect to login instead
+            return redirect(url_for('login'))
     
     if flag:
         flash(flag)
         print(flag)
 
     return render_template('auth/register.html')
+
+
+@app.route('/login', methods=('GET', 'POST'))
+def login():
+    flag = None
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        
+        if user is None:
+            flag = 'No such user'
+        elif not check_password_hash(user.password, password):
+            flag = 'Incorrect password'
+        
+        if flag:
+            flash(flag)
+        else:
+            session.clear()
+            session['user_id'] = user.id
+            return redirect(url_for('register'))
+    
+    return render_template('auth/login.html')
+
+
+@app.before_request
+def things_to_do():
+    print('before request')
+    user_id = session.get('user_id')
+
+    if user_id is None:
+        g.user = None
+    else:
+        user = User.query.get(user_id)
+        g.user = user
+        print('user set')
+        print(user)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
