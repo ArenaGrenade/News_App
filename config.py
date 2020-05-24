@@ -6,7 +6,7 @@ NEWS_API_KEY = '78a80e3fd33f4c35ba74643024219cfd'
 
 class Config:
 
-    SECRET_KEY = 'test'
+    SECRET_KEY = 'b091yhcojm65ttn91vyc10cggynxmucyhcg0184cg08n1gc000gcn8gmyxg1yg48xg0874g7gcn8mgmxyg'
     FLASK_APP = 'app_runner.py'
     FLASK_DEBUG = 1
 
