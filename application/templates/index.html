@@ -21,7 +21,11 @@
     </style>
 </head>
 <body>
+    {% if current_user.is_authenticated %}
+    <div id="overlay">Hello, {{ current_user.firstname }}</div>
+    {% else %}
     <div id="overlay">HELLO</div>
+    {% endif %}
     <script src="{{ url_for('static', filename='JS/three.min.js') }}"></script>
     <script src="{{ url_for('static', filename='JS/3d_scene.js') }}"></script>
 </body>

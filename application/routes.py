@@ -1,8 +1,10 @@
 from flask import request, render_template, redirect, flash, url_for, session, g
 from flask import current_app as app
+from flask_login import login_required, logout_user, current_user, login_user
 from .models import db, User
 from . import news_api_client
 from werkzeug.security import check_password_hash
+from . import login_manager
 import json
 
 
@@ -50,6 +52,7 @@ def register():
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     flag = None
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -63,11 +66,18 @@ def login():
         if flag:
             flash(flag)
         else:
-            session.clear()
-            session['user_id'] = user.id
+            login_user(user)
+            flash('Logged in')
             return redirect(url_for('test'))
 
     return render_template('auth/login.html')
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
 
 
 @app.route('/test')
@@ -75,15 +85,17 @@ def test():
     return render_template('test.html')
 
 
-@app.before_request
-def things_to_do():
-    user_id = session.get('user_id')
+@login_manager.user_loader
+def load_user(user_id):
+    if user_id is not None:
+        return User.query.get(user_id)
+    return None
 
-    if user_id is None:
-        g.user = None
-    else:
-        user = User.query.get(user_id)
-        g.user = user
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    flash('User has to be logged in inorder to perform that action')
+    return redirect(url_for('login'))
 
 
 @app.route('/news_api_test')

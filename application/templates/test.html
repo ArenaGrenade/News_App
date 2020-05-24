@@ -1,9 +1,9 @@
 {% for message in get_flashed_messages() %}
-    <div style="color: red;">{{ message }}</div>
+    <div style="color: green;">{{ message }}</div>
 {% endfor %}
 
-{% if g.user %}
-    <h2>{{ g.user.firstname }}</h2>
+{% if current_user.is_authenticated %}
+    <h2>{{ current_user.username }}</h2>
 {% else %}
     <h2> No users logged in </h2>
 {% endif %}

@@ -1,9 +1,10 @@
 from . import db
 from flask_sqlalchemy import event
+from flask_login import UserMixin
 from werkzeug.security import generate_password_hash
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     firstname = db.Column(db.String(24), nullable=False)
     lastname = db.Column(db.String(24))
