@@ -10,6 +10,7 @@ class Config:
     FLASK_APP = 'app_runner.py'
     FLASK_DEBUG = 1
 
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, '../dbase.sqlite')
-    SQLALCHEMY_ECHO = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'dbase.sqlite')
+    print(basedir)
+    #SQLALCHEMY_ECHO = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False

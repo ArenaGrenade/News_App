@@ -28,6 +28,9 @@ def register():
             flag = 'Username must be unique'
         elif User.query.filter_by(email=email).first():
             flag = 'Email is already registered'
+        
+        if flag:
+            flash(flag)
         else:
             user = User(
                 firstname=request.form['firstname'],
@@ -38,7 +41,10 @@ def register():
             )
             db.session.add(user)
             db.session.commit()
-            print('committed')
+            print('committed user to dbase')
+            return redirect(url_for('login'))
+
+    return render_template('auth/register.html')
 
 
 @app.route('/login', methods=('GET', 'POST'))
@@ -59,14 +65,18 @@ def login():
         else:
             session.clear()
             session['user_id'] = user.id
-            return redirect(url_for('register'))
+            return redirect(url_for('test'))
 
     return render_template('auth/login.html')
 
 
+@app.route('/test')
+def test():
+    return render_template('test.html')
+
+
 @app.before_request
 def things_to_do():
-    print('before request')
     user_id = session.get('user_id')
 
     if user_id is None:
@@ -74,8 +84,7 @@ def things_to_do():
     else:
         user = User.query.get(user_id)
         g.user = user
-        print('user set')
-        print(user)
+
 
 @app.route('/news_api_test')
 def news_tester():
