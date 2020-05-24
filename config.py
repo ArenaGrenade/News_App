@@ -1,6 +1,7 @@
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+NEWS_API_KEY = '78a80e3fd33f4c35ba74643024219cfd'
 
 
 class Config:

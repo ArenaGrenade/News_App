@@ -1,8 +1,9 @@
 from flask import request, render_template, redirect, flash, url_for, session, g
 from flask import current_app as app
 from .models import db, User
+from . import news_api_client
 from werkzeug.security import check_password_hash
-
+import json
 
 
 @app.route('/')
@@ -75,3 +76,8 @@ def things_to_do():
         g.user = user
         print('user set')
         print(user)
+
+@app.route('/news_api_test')
+def news_tester():
+    headlines = news_api_client.get_top_headlines(language='en')
+    return render_template('news_tester.html', articles=headlines['articles'])
