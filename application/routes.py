@@ -37,9 +37,9 @@ def register():
             user = User(
                 firstname=request.form['firstname'],
                 lastname=request.form['lastname'],
-                email=request.form['email'],
                 username=request.form['username'],
-                password=request.form['password']
+                password=request.form['password'],
+                email=request.form['email']
             )
             db.session.add(user)
             db.session.commit()
