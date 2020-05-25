@@ -1,3 +1,7 @@
 {% for t in articles %}
     <h1>{{ t.id }} - {{ t.link }}</h1>
 {% endfor %}
+<br><hr><br>
+{% for t in tags %}
+    <h2>{{ t.id }} - {{ t.tag }}</h2>
+{% endfor %}
