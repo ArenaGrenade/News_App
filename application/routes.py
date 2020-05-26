@@ -1,16 +1,15 @@
 from flask import request, render_template, redirect, flash, url_for, session, g
 from flask import current_app as app
 from flask_login import login_required, logout_user, current_user, login_user
-from .models import db, User
+from .models import db, User, NewsArticle, Tag
 from . import news_api_client
 from werkzeug.security import check_password_hash
 from . import login_manager
-import json
 
 
 @app.route('/')
 def homepage():
-    return render_template("index.html");
+    return render_template("index.html")
 
 
 @app.route('/register', methods=('GET', 'POST'))
@@ -80,11 +79,6 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/test')
-def test():
-    return render_template('test.html')
-
-
 @login_manager.user_loader
 def load_user(user_id):
     if user_id is not None:
@@ -98,7 +92,75 @@ def unauthorized():
     return redirect(url_for('login'))
 
 
+#  TESTING METHODS
 @app.route('/news_api_test')
 def news_tester():
     headlines = news_api_client.get_top_headlines(language='en')
     return render_template('news_tester.html', articles=headlines['articles'])
+
+
+@app.route('/newstest', methods=('GET', 'POST'))
+def newstest():
+    if request.method == 'POST':
+        link = request.form['link']
+        error = None
+
+        if link is None:
+            error = 'Link cannot be empty'
+        elif NewsArticle.query.filter_by(link=link).first():
+            error = 'Link needs to be unique'
+
+        if error is None:
+            article = NewsArticle(link=link)
+            db.session.add(article)
+            db.session.commit()
+
+            return redirect(url_for('display'))
+        flash(error)
+
+    return render_template('test/newstest.html')
+
+
+@app.route('/favorite_articles', methods=('GET', 'POST'))
+@login_required
+def favorite_articles():
+    if request.method == 'POST':
+        article_id = request.form['article_id']
+        news_article = NewsArticle.query.get(article_id)
+        user = User.query.get(current_user.id)
+
+        if news_article is not None:
+            print('retrieved ' + str(news_article.link))
+            user.saved_articles.append(news_article)  #TODO: AttributeError: 'InstrumentedList' object has no attribute 'add'
+            db.session.commit()
+        else:
+            print('Issue. No such article')
+
+        print(user.saved_articles)
+        return redirect((url_for('test')))
+    return render_template('test/favorite_articles.html')
+
+
+@app.route('/display_articles')
+def display():
+    news = NewsArticle.query.all()
+    tags = Tag.query.all()
+    return render_template('test/display_articles.html', articles=news, tags=tags)
+
+
+# DO NOT REMOVE THIS PLEASE
+@app.route('/test')
+def test():
+    for article in NewsArticle.query.all():
+        print('Link ' + str(article.link) + ' id ' + str(article.id), end='')
+        print(NewsArticle.query.filter_by(id=article.id).first().users)
+    #  Given the news_article id, retrieve the users that are linked to it
+    #  print(NewsArticle.query.filter_by(id=4).first().users)
+    #  Retrieve all saved articles by the user, given the ID
+    articles = User.query.filter_by(id=current_user.id).first().saved_articles
+    return render_template('test.html', articles=articles)
+
+
+@app.route('/generate_tags')
+def generate_tags():
+    return redirect(url_for('test'))
