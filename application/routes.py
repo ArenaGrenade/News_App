@@ -96,7 +96,9 @@ def unauthorized():
 #  TESTING METHODS
 @app.route('/news_api_test')
 def news_tester():
-    headlines = news_api_client.get_top_headlines(language='en')
+    headlines = news_api_client.get_everything(language='en',
+                                               sort_by='relevancy'
+                                               )
     Article = headlines['articles']
     for article in Article:
         print(article['url'])
@@ -204,3 +206,7 @@ def test():
 @app.route('/generate_tags')
 def generate_tags():
     return redirect(url_for('test'))
+
+@app.route('/home_page')
+def home_page():
+    return url_for('home.html')
