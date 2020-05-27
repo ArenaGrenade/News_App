@@ -5,7 +5,9 @@ from .models import db, User, NewsArticle, Tag
 from . import news_api_client
 from werkzeug.security import check_password_hash
 from . import login_manager
-from datetime import datetime
+from datetime import datetime, timedelta
+
+
 from newspaper import Article
 import re
 @app.route('/')
@@ -96,7 +98,14 @@ def unauthorized():
 #  TESTING METHODS
 @app.route('/news_api_test')
 def news_tester():
-    headlines = news_api_client.get_top_headlines(language='en')
+    time_now=datetime.now() - timedelta(hours=24)
+    headlines = news_api_client.get_everything(language='en',
+                                               sort_by='popularity',
+                                               domains='bbc.co.uk',
+                                               page_size=20,
+                                               page=1,
+                                               from_param=time_now.isoformat(timespec='seconds')
+                                               )
     Article = headlines['articles']
     for article in Article:
         print(article['url'])
@@ -198,3 +207,7 @@ def test():
 @app.route('/generate_tags')
 def generate_tags():
     return redirect(url_for('test'))
+
+@app.route('/home_page')
+def home_page():
+    return url_for('home.html')
