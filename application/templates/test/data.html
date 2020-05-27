@@ -2,27 +2,22 @@
 <html lang="en">
 
 <head>
+    <link rel="icon" href="data:,">
     <meta charset="UTF-8">
-    <title>News Api Test</title>
+    <title>Parsed Data Test</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/news_api_tester.css') }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 
 <body>
-    <div class="row">
-        {% for article in articles %}
-        <div class="grid-item">
-            <div class="news_card">
-                <div class="container">
-                    <p><a href="{{ url_for('ParsedData', title=requi[loop.index0])}}">{{ article.title }}(({{requi[loop.index0]}}))</a></p>
-                </div>
-            </div>
-        </div>
+    <h1>{{Variable['Title']}}</h1>
+    <h3>{{Variable['Authors']}}</h3>
+    <ul>
+        {% for para in Variable['Content']%}
+        <li>{{para}}</li>
         {% endfor %}
-    </div>
-
+    </ul>
 </body>
-
 
 </html>
