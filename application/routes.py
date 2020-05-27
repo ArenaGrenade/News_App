@@ -97,7 +97,7 @@ def unauthorized():
 @app.route('/news_api_test')
 def news_tester():
     headlines = news_api_client.get_everything(language='en',
-                                               sort_by='relevancy'
+                                               sort_by='popularity'
                                                )
     Article = headlines['articles']
     for article in Article:
