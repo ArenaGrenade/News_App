@@ -33,6 +33,10 @@ def hash_user_password(target, value, oldvalue, initiator):
     return value
 
 
+#  Given the news_article id, retrieve the users that are linked to it
+#  print(NewsArticle.query.filter_by(id=4).first().users)
+#  Retrieve all saved articles by the user, given the ID
+
 class NewsArticle(db.Model):
     __tablename__ = 'newsarticle'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

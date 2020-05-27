@@ -3,7 +3,7 @@ html, body {
   padding: 0;
 }
 
-html {
+html, body {
   background-color: #ed5656;
 }
 
@@ -36,14 +36,22 @@ a:hover {
 h2 {
   color: #0d0d0d;
   padding-bottom: 15px;
+  padding-top: 15px;
   border-bottom: 2px solid #e95f5f;
 }
 
 
 #wrapper {
+  display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+  display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+  display: -ms-flexbox;      /* TWEENER - IE 10 */
+  display: -webkit-flex; 
   display: flex;
   align-items: center;
   flex-direction: column; 
+
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
   justify-content: center;
   width: 100%;
   min-height: 100%;
@@ -61,6 +69,7 @@ h2 {
   position: relative;
   padding: 0;
   -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+  -moz-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
   box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
   text-align: center;
 }
@@ -73,10 +82,13 @@ h2 {
   text-align: center;
   -webkit-border-radius: 0 0 10px 10px;
   border-radius: 0 0 10px 10px;
+
+  /* Test */
+  max-height: 15vh;
 }
 
 
-input[type=button], input[type=submit]  {
+.button  {
   background-color: #ed5656;
   border: none;
   color: white;
@@ -86,7 +98,7 @@ input[type=button], input[type=submit]  {
   display: inline-block;
   text-transform: uppercase;
   font-size: 13px;
-  -webkit-box-shadow: 0 10px 15px 0 rgba(95,186,233,0.4);
+  -webkit-box-shadow: 0 10px 15px 0 rgba(233, 95, 95,0.4);
   box-shadow: 0 10px 15px 0 rgba(233, 95, 95,0.4);
   -webkit-border-radius: 5px 5px 5px 5px;
   border-radius: 5px 5px 5px 5px;
@@ -98,11 +110,11 @@ input[type=button], input[type=submit]  {
   transition: background-color 0.3s ease-in-out;
 }
 
-input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover {
-  background-color: #39ace7;
+.button:hover {
+  background-color: #e73939;
 }
 
-input[type=text], input[type=password] {
+input[type=text], input[type=password], input[type=email] {
   background-color: #f6f6f6;
   border: none;
   color: #0d0d0d;
@@ -131,17 +143,17 @@ input[type=text], input[type=password] {
   transition: border-bottom 0.3s ease-in-out;
 }
 
-input[type=text]:focus, input[type=password]:focus {
+input[type=text]:focus, input[type=password]:focus, input[type=email]:focus {
   background-color: #fff;
   border-bottom: 2px solid #e95f5f;
 }
 
-input[type=text]:hover, input[type=password]:hover {
+input[type=text]:hover, input[type=password]:hover, input[type=email]:focus {
   cursor: default;
   border-bottom: 2px solid #e95f5f;
 }
 
-input[type=text]::placeholder, input[type=password]::placeholder {
+input[type=text]::placeholder, input[type=password]::placeholder, input[type=email]::placeholder {
   color: #8f8f8f;
   -webkit-transition: color 0.3s ease-in-out;
   -moz-transition: color 0.3s ease-in-out;
@@ -150,7 +162,7 @@ input[type=text]::placeholder, input[type=password]::placeholder {
   transition: color 0.3s ease-in-out;
 }
 
-input[type=text]:focus::placeholder, input[type=password]:focus::placeholder {
+input[type=text]:focus::placeholder, input[type=password]:focus::placeholder, input[type=email]:focus::placeholder {
   color: transparent;
 }
 

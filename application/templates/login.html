@@ -4,7 +4,7 @@
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="../static/CSS/log_reg.css">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/log_reg.css') }}">
 </head>
 
 <body>
@@ -12,8 +12,8 @@
   <div id="formContent">
     <h2>Log in</h2>
     <form method="POST">
-      <input type="text" id="login" class="second" name="login" placeholder="username" autocomplete="off">
-      <input type="password" id="password" class=" third" name="login" placeholder="password">
+      <input type="text" id="username" class="second" name="username" placeholder="username" autocomplete="off">
+      <input type="password" id="password" class=" third" name="password" placeholder="password">
       <input type="submit" class="button" value="Log In">
     </form>
     <div id="formFooter">

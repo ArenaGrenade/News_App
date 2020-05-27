@@ -46,7 +46,7 @@ def register():
             print('committed user to dbase')
             return redirect(url_for('login'))
 
-    return render_template('auth/register.html')
+    return render_template('register.html')
 
 
 @app.route('/login', methods=('GET', 'POST'))
@@ -70,7 +70,7 @@ def login():
             flash('Logged in')
             return redirect(url_for('test'))
 
-    return render_template('auth/login.html')
+    return render_template('login.html')
 
 
 @app.route('/logout')
@@ -191,12 +191,6 @@ def display():
 # DO NOT REMOVE THIS PLEASE
 @app.route('/test')
 def test():
-    for article in NewsArticle.query.all():
-        print('Link ' + str(article.link) + ' id ' + str(article.id), end='')
-        print(NewsArticle.query.filter_by(id=article.id).first().users)
-    #  Given the news_article id, retrieve the users that are linked to it
-    #  print(NewsArticle.query.filter_by(id=4).first().users)
-    #  Retrieve all saved articles by the user, given the ID
     articles = User.query.filter_by(id=current_user.id).first().saved_articles
     return render_template('test.html', articles=articles)
 
