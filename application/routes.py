@@ -97,33 +97,25 @@ def unauthorized():
 @app.route('/news_api_test')
 def news_tester():
     headlines = news_api_client.get_top_headlines(language='en')
-    Article=headlines['articles']
-    print(len(Article))
-    req=[]
+    Article = headlines['articles']
     for article in Article:
-        if (len(article['url'])<200):
-            print(article['url'])
-            present = NewsArticle.query.filter_by(link=article['url']).first()
-            if present is None:
-                newnews = NewsArticle(
-                    date_published=datetime.now(tz=None),
-                    link=article['url'],
-                )
-                db.session.add(newnews)
-                db.session.commit()
-            articlereq=NewsArticle.query.filter_by(link=article['url']).first()
-            print(int(articlereq.id))
-            req.append(int(articlereq.id))
-        else:
-            Article.remove(article)
-    print(len(Article))
-    print(len(req))
-    for i in req:
-        print(NewsArticle.query.get(i).link)
-    return render_template('news_tester.html',requi=req,articles=Article)
+        print(article['url'])
+        print(article['publishedAt'])
+        present = NewsArticle.query.filter_by(link=article['url']).first()
+        if present is None:
+            present = NewsArticle(
+                date_published=article['publishedAt'],
+                link=article['url'],
+            )
+            db.session.add(present)
+            db.session.commit()
+        article['news_id'] = present.id
 
-#Parsed Data Here
-@app.route('/<title>')
+    return render_template('news_tester.html',articles=Article)
+
+
+# Parsed Data Here
+@app.route('/<int:title>')
 def ParsedData(title):
     print(type(title))
     quer=int(title)
@@ -138,14 +130,14 @@ def ParsedData(title):
     print(article.authors)
     s = article.text
     paragraphs = re.split('\n\s*\n', s)
-    Articledetails={
+    Articledetails = {
         "Title":article.title,
         "Authors":article.authors,
         "Content":paragraphs
     }
-    print("Tags")
     print(article.tags)
     return render_template("test/data.html",Variable=Articledetails)
+
 
 @app.route('/newstest', methods=('GET', 'POST'))
 def newstest():

@@ -36,7 +36,7 @@ def hash_user_password(target, value, oldvalue, initiator):
 class NewsArticle(db.Model):
     __tablename__ = 'newsarticle'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    link = db.Column(db.String(200), nullable=False)
+    link = db.Column(db.String(600), nullable=False)
     date_published = db.Column(db.DateTime, nullable=True)
     related_tags = db.relationship("Tag", secondary=related_tags,
                                    backref=db.backref('newsarticles'))
