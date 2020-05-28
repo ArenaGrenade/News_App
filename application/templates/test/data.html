@@ -23,10 +23,11 @@
         {% if Variable.saved == false %}
             <button class="favorite" name="{{ Variable.id }}">Bookmark</button>
             <button class="unfavorite" name="{{ Variable.id }}" style="visibility: hidden"> Un-Bookmark </button>
-            <h2 id="handle" style="color: blue"></h2>
+            <h2 class="handle" style="color: blue">test</h2>
         {% else %}
+            <button class="favorite" name="{{ Variable.id }}" style="visibility: hidden">Bookmark</button>
             <button class="unfavorite" name="{{ Variable.id }}"> Un-Bookmark </button>
-            <h2 style="color: blue;">Saved! Hi</h2>
+            <h2 style="color: blue;" class="handle">Saved! Hi</h2>
         {% endif %}
     {% else %}
         <a href="{{ url_for('login') }}">Login to save articles</a>
@@ -50,7 +51,8 @@
                 success: function() {
                     $(".favorite").css("visibility", "hidden");
                     $(".unfavorite").css("visibility", "visible");
-                    $("#handle").html('SAVED!');
+                    console.log($(".handle"));
+                    $(".handle").html('SAVED!');
                 }
             });
         });
@@ -66,7 +68,7 @@
                 success: function() {
                     $(".favorite").css("visibility", "visible");
                     $(".unfavorite").css("visibility", "hidden");
-                    $("#handle").html('UN-SAVED!');
+                    $(".handle").html('UN-SAVED!');
                 }
             });
         });
