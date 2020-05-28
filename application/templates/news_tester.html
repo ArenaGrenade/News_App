@@ -15,7 +15,11 @@
         <div class="grid-item">
             <div class="news_card">
                 <div class="container">
-                    <p><a href="{{ url_for('ParsedData', title=article.news_id)}}">{{ article.title }}(({{ article.news_id }}))</a></p>
+                    <p><a href="{{ url_for('ParsedData', title=article.news_id)}}">{{ article.title }}(({{ article.news_id }}))</a>
+                        {% if article.saved %}
+                            Bookmarked!
+                        {% endif %}
+                    </p>
                 </div>
             </div>
         </div>

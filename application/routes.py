@@ -106,7 +106,13 @@ def news_tester():
                                                page=1,
                                                from_param=time_now.isoformat(timespec='seconds')
                                                )
+    user_save_list = []
+    if current_user.is_authenticated:
+        user_save_list = [article.id for article in User.query.filter_by(id=current_user.id).first().saved_articles]
+    print(user_save_list)
+    user_save_list = set(user_save_list)
     Article = headlines['articles']
+
     for article in Article:
         print(article['url'])
         print(article['publishedAt'])
@@ -120,32 +126,43 @@ def news_tester():
             db.session.commit()
         article['news_id'] = present.id
 
+        if present.id in user_save_list:
+            article['saved'] = True
+        else:
+            article['saved'] = False
+
     return render_template('news_tester.html',articles=Article)
 
 
 # Parsed Data Here
 @app.route('/<int:title>')
 def ParsedData(title):
-    print(type(title))
-    quer=int(title)
-    url=NewsArticle.query.get(quer).link
-    print(url)
+    current_article = NewsArticle.query.get(title)
+    url = current_article.link
+    print('URL: ' + url + ' id ' + str(current_article.id))
     article = Article(url)
     article.download()
     article.parse()
-    print("Article Title:")
-    print(article.title)
-    print("Authors")
-    print(article.authors)
     s = article.text
     paragraphs = re.split('\n\s*\n', s)
-    Articledetails = {
-        "Title":article.title,
-        "Authors":article.authors,
-        "Content":paragraphs
+
+    saved_articles = []
+    if current_user.is_authenticated:
+        saved_articles = [article.id for article in User.query.filter_by(id=current_user.id).first().saved_articles]
+
+    saved = False
+    if title in saved_articles:
+        saved = True
+
+    print('This page has been saved ' + str(saved))
+    article_details = {
+        "Title": article.title,
+        "Authors": article.authors,
+        "Content": paragraphs,
+        "id": current_article.id,
+        "saved": saved
     }
-    print(article.tags)
-    return render_template("test/data.html",Variable=Articledetails)
+    return render_template("test/data.html", Variable=article_details)
 
 
 @app.route('/newstest', methods=('GET', 'POST'))
@@ -170,11 +187,12 @@ def newstest():
     return render_template('test/newstest.html')
 
 
+# TODO: allow "unsave" articles
 @app.route('/favorite_articles', methods=('GET', 'POST'))
 @login_required
 def favorite_articles():
     if request.method == 'POST':
-        article_id = request.form['article_id']
+        article_id = request.form['data']
         news_article = NewsArticle.query.get(article_id)
         user = User.query.get(current_user.id)
 
@@ -185,22 +203,16 @@ def favorite_articles():
         else:
             print('Issue. No such article')
 
-        print(user.saved_articles)
-        return redirect((url_for('test')))
+        return redirect(request.url)
     return render_template('test/favorite_articles.html')
-
-
-@app.route('/display_articles')
-def display():
-    news = NewsArticle.query.all()
-    tags = Tag.query.all()
-    return render_template('test/display_articles.html', articles=news, tags=tags)
 
 
 # DO NOT REMOVE THIS PLEASE
 @app.route('/test')
 def test():
-    articles = User.query.filter_by(id=current_user.id).first().saved_articles
+    articles = []
+    if current_user.is_authenticated:
+        articles = User.query.filter_by(id=current_user.id).first().saved_articles
     return render_template('test.html', articles=articles)
 
 
