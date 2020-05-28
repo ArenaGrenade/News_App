@@ -22,9 +22,11 @@
     {% if current_user.is_authenticated %}
         {% if Variable.saved == false %}
             <button class="favorite" name="{{ Variable.id }}">Bookmark</button>
+            <button class="unfavorite" name="{{ Variable.id }}" style="visibility: hidden"> Un-Bookmark </button>
             <h2 id="handle" style="color: blue"></h2>
         {% else %}
-            <h2 style="color: blue;">Saved!</h2>
+            <button class="unfavorite" name="{{ Variable.id }}"> Un-Bookmark </button>
+            <h2 style="color: blue;">Saved! Hi</h2>
         {% endif %}
     {% else %}
         <a href="{{ url_for('login') }}">Login to save articles</a>
@@ -37,16 +39,34 @@
         console.log('Page is ready');
         var clicked;
         $(".favorite").click(function(){
-            console.log('clicked');
+            console.log('favorite');
             clicked = $(this).attr("name");
             $.ajax({
                 type : 'POST',
                 url : "{{url_for('favorite_articles')}}",
-                data : {'data': clicked},
+                data : {'data': clicked,
+                        'operation': 'save'
+                        },
                 success: function() {
-                    $(".favorite").html('saved');
-                    $(".favorite").attr("disabled", true);
+                    $(".favorite").css("visibility", "hidden");
+                    $(".unfavorite").css("visibility", "visible");
                     $("#handle").html('SAVED!');
+                }
+            });
+        });
+        $(".unfavorite").click(function(){
+            console.log('unfavorite');
+            clicked = $(this).attr("name");
+            $.ajax({
+                type : 'POST',
+                url : "{{url_for('favorite_articles')}}",
+                data : {'data': clicked,
+                        'operation': 'unsave'
+                        },
+                success: function() {
+                    $(".favorite").css("visibility", "visible");
+                    $(".unfavorite").css("visibility", "hidden");
+                    $("#handle").html('UN-SAVED!');
                 }
             });
         });

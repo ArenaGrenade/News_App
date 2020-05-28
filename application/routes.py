@@ -193,12 +193,15 @@ def newstest():
 def favorite_articles():
     if request.method == 'POST':
         article_id = request.form['data']
+        operation = request.form['operation']
         news_article = NewsArticle.query.get(article_id)
         user = User.query.get(current_user.id)
 
         if news_article is not None:
-            print('retrieved ' + str(news_article.link))
-            user.saved_articles.append(news_article)  #TODO: AttributeError: 'InstrumentedList' object has no attribute 'add'
+            if operation == 'save':
+                user.saved_articles.append(news_article)
+            else:
+                user.saved_articles.remove(news_article)
             db.session.commit()
         else:
             print('Issue. No such article')
