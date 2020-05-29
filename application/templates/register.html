@@ -10,6 +10,13 @@
   <body>
   <div id="wrapper">
     <div id="formContent">
+
+    <div class="flashed_messages_container">
+    {% for message in get_flashed_messages() %}
+      <p class="flashed_message">{{ message }}</p>
+    {% endfor %}
+    </div>
+    
       <h2>Register</h2>
       <form method="POST">
         <input type="text" name="firstname" id="firstname" placeholder="First Name" autocomplete="off" required>

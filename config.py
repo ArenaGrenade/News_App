@@ -10,7 +10,7 @@ class Config:
     FLASK_APP = 'app_runner.py'
     FLASK_DEBUG = 1
 
-    SQLALCHEMY_DATABASE_URI = "postgres://xzrzrfnrggahbl:0f7aaeabcb50b45db2fd4b3086b08177e63723fd3bcf5bee83d0d997e54e9b83@ec2-34-198-243-120.compute-1.amazonaws.com:5432/ddk9876qjng4nt"
+    SQLALCHEMY_DATABASE_URI = "postgres://yzuauynghmyjvr:7258bd70210a5d656b72fe8fae518f961504e728ede3ca727658c8fdae12ac5d@ec2-54-211-210-149.compute-1.amazonaws.com:5432/daktevo0cgdf4v"
     print(basedir)
     #SQLALCHEMY_ECHO = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False

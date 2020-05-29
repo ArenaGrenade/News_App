@@ -8,13 +8,23 @@
 </head>
 
 <body>
-<div id="wrapper">
+<div id="wrapper" class="container">
+
+
   <div id="formContent">
+
+    <div class="flashed_messages_container">
+    {% for message in get_flashed_messages() %}
+      <p class="flashed_message">{{ message }}</p>
+    {% endfor %}
+    </div>
+
+
     <h2>Log in</h2>
     <form method="POST">
       <input type="text" id="username" class="second" name="username" placeholder="username" autocomplete="off">
       <input type="password" id="password" class=" third" name="password" placeholder="password">
-      <input type="submit" class="button" value="Log In">
+      <input type="submit" class="button btn" value="Log In">
     </form>
     <div id="formFooter">
       <a class="underlineHover" href="#">New User?</a>
