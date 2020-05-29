@@ -6,7 +6,7 @@
     <h2>{{ current_user.username }}</h2>
     {% if articles %}
         {% for article in articles %}
-            <h3>{{ article.id }} - {{ article.link }}</h3>
+            <a href="{{ url_for('ParsedData', title=article.id)}}"><h3>{{ article.id }} - {{ article.link }}</h3></a>
         {% endfor %}
     {% endif %}
 {% else %}

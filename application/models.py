@@ -25,6 +25,17 @@ class User(db.Model, UserMixin):
     saved_articles = db.relationship("NewsArticle", secondary=saved_articles,
                                      backref=db.backref('users'))
 
+    def save_article(self, article):
+        if article not in self.saved_articles:
+            self.saved_articles.append(article)
+
+    def un_save_article(self, article):
+        if article in self.saved_articles:
+            self.saved_articles.remove(article)
+
+    def retrieve_articles(self):
+        return self.saved_articles
+
 
 @event.listens_for(User.password, 'set', retval=True)
 def hash_user_password(target, value, oldvalue, initiator):

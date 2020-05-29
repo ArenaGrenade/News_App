@@ -48,7 +48,7 @@ h2 {
   display: -webkit-flex; 
   display: flex;
   align-items: center;
-   flex-direction: column;  
+  flex-direction: column;  
 
   -webkit-justify-content: center;
   -moz-justify-content: center;
@@ -146,8 +146,22 @@ h2 {
     }
 }
 
+.name {
+  display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+  display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+  display: -ms-flexbox;      /* TWEENER - IE 10 */
+  display: -webkit-flex; 
+  display: flex 0 1 auto;
 
+  padding-left: 32px;
+  padding-right: 32px;
+  flex-direction: row;
+  position: relative;
+}
 
+.name > input {
+  overflow: hidden;
+}
 
 #formFooter {
   background-color: #f6f6f6;

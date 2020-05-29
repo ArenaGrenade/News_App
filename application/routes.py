@@ -187,7 +187,6 @@ def newstest():
     return render_template('test/newstest.html')
 
 
-# TODO: allow "unsave" articles
 @app.route('/favorite_articles', methods=('GET', 'POST'))
 @login_required
 def favorite_articles():
@@ -199,9 +198,9 @@ def favorite_articles():
 
         if news_article is not None:
             if operation == 'save':
-                user.saved_articles.append(news_article)
+                user.save_article(news_article)
             else:
-                user.saved_articles.remove(news_article)
+                user.un_save_article(news_article)
             db.session.commit()
         else:
             print('Issue. No such article')
@@ -215,13 +214,14 @@ def favorite_articles():
 def test():
     articles = []
     if current_user.is_authenticated:
-        articles = User.query.filter_by(id=current_user.id).first().saved_articles
+        articles = User.query.get(current_user.id).retrieve_articles()
     return render_template('test.html', articles=articles)
 
 
 @app.route('/generate_tags')
 def generate_tags():
     return redirect(url_for('test'))
+
 
 @app.route('/home_page')
 def home_page():
