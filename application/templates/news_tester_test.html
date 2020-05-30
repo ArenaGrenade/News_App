@@ -1,6 +1,8 @@
 {% extends "layout.html" %}
 {% block head %}
   {{ super() }}
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
+
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/news_display.css') }}">
 {% endblock %}
 {% block content %}
@@ -17,6 +19,11 @@
         </div>
         <div class="card-action">
             <a href="{{ url_for('ParsedData', title=article.news_id)}}">Read More</a>
+            {% if current_user.is_authenticated %}
+            <i id="{{ article['news_id'] }}" {% if article.saved %} class="save_btn unfavorite material-icons right" {% else %} class="save_btn favorite material-icons-outlined right" {% endif %} name="{{ article['news_id'] }}">
+                star_rate
+            </i>
+            {% endif %}
         </div>
         <div class="card-reveal">
             <span class="card-title grey-text text-darken-4">Abstract<i class="material-icons right">close</i></span>
@@ -26,5 +33,51 @@
     </div>
   {% endfor %}
     </div>
+
+{% endblock %}
+
+{% block script %}
+
+
+<script>
+    console.log('testing');
+    $(document).ready(function(){
+        console.log('Page is ready');
+        var clicked, temp;
+        $(".favorite").click(function(){
+            console.log($(this).attr("id"));
+            clicked = $(this).attr("name");
+            temp = $(this);
+            console.log(clicked);
+            $.ajax({
+                type : 'POST',
+                url : "{{url_for('favorite_articles')}}",
+                data : {'data': clicked,
+                        'operation': 'save'
+                        },
+                success: function() {
+                    temp.addClass('unfavorite').removeClass('favorite');
+                    temp.addClass('material-icons').removeClass('material-icons-outlined');
+                }
+            });
+        });
+        $(".unfavorite").click(function(){
+            console.log('unfavorite');
+            clicked = $(this).attr("name");
+            temp = $(this);
+            $.ajax({
+                type : 'POST',
+                url : "{{url_for('favorite_articles')}}",
+                data : {'data': clicked,
+                        'operation': 'unsave'
+                        },
+                success: function() {
+                    temp.addClass('favorite').removeClass('unfavorite');
+                    temp.addClass('material-icons-outlined').removeClass('material-icons');
+                }
+            });
+        });
+    });
+</script>
 
 {% endblock %}
