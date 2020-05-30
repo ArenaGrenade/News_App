@@ -44,10 +44,14 @@
     $(document).ready(function(){
         console.log('Page is ready');
         var clicked, temp;
-        $(".favorite").click(function(){
+        $(document).on('click', '.favorite', function(){
+            console.log('Favorite');
             console.log($(this).attr("id"));
             clicked = $(this).attr("name");
             temp = $(this);
+            $(this).toggleClass("favorite unfavorite");
+            $(this).toggleClass("material-icons material-icons-outlined");
+            console.log($(this).attr("class"));
             console.log(clicked);
             $.ajax({
                 type : 'POST',
@@ -56,15 +60,16 @@
                         'operation': 'save'
                         },
                 success: function() {
-                    temp.addClass('unfavorite').removeClass('favorite');
-                    temp.addClass('material-icons').removeClass('material-icons-outlined');
+                    console.log("Successfully favorited");
                 }
             });
         });
-        $(".unfavorite").click(function(){
+        $(document).on('click', '.unfavorite', function(){
             console.log('unfavorite');
             clicked = $(this).attr("name");
             temp = $(this);
+            $(this).toggleClass("favorite unfavorite");
+            $(this).toggleClass("material-icons material-icons-outlined");
             $.ajax({
                 type : 'POST',
                 url : "{{url_for('favorite_articles')}}",
@@ -72,8 +77,7 @@
                         'operation': 'unsave'
                         },
                 success: function() {
-                    temp.addClass('favorite').removeClass('unfavorite');
-                    temp.addClass('material-icons-outlined').removeClass('material-icons');
+                    console.log("Successfully unfavorited");
                 }
             });
         });
