@@ -1,0 +1,48 @@
+<html lang="en">
+<head>
+    <!-- Template: https://flask.palletsprojects.com/en/1.1.x/patterns/templateinheritance/ -->
+    <!-- Materialize CSS: https://materializecss.com/ -->
+    <!-- Super the head content for  -->
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Using materialize CSS -->
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    {% endblock %}
+    {% block title %}
+    <title>Breaking News</title>
+    {% endblock %}
+</head>
+<body>
+    <!-- Navbar: https://materializecss.com/navbar.html -->
+    <!-- Allow for more navbar content and mobile hamburger icon -->
+    <div class="navbar-fixed">
+    <nav>
+      <div class="nav-wrapper black">
+        <a href="#" class="brand-logo">IDK</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li>
+          {% if current_user.is_authenticated %}
+            <a href="{{ url_for('test') }}">{{ current_user.firstname.capitalize() }}</a>
+          {% else %}
+            <a href="{{ url_for('login') }}">Log in</a>
+          {% endif %}
+          </li>
+        </ul>
+      </div>
+    </nav>
+    </div>
+
+    {% block content %}
+    <h1>Testing</h1>
+    {% endblock %}
+
+
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>

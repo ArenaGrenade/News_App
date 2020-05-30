@@ -1,0 +1,18 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    background-color: #ed5656;
+}
+
+.cards-holder {
+    margin-top: 3%;
+}
+
+/* If we need to constrict image size on the cards */
+/*.card-image{*/
+/*    height: 40%; !* Your height here *!*/
+/*    overflow: hidden;*/
+/*}*/

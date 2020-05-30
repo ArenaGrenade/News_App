@@ -131,7 +131,15 @@ def news_tester():
         else:
             article['saved'] = False
 
-    return render_template('news_tester.html',articles=Article)
+    #return render_template('news_tester.html',articles=Article)
+    return render_template('news_tester_test.html', articles=Article)
+
+
+@app.route('/tester')
+def tester():
+    headlines = news_api_client.get_top_headlines(language='en')['articles'][:5]
+    print(headlines)
+    return render_template('news_tester_test.html', headlines_all=headlines)
 
 
 # Parsed Data Here

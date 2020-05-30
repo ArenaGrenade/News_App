@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block head %}
+  {{ super() }}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/news_display.css') }}">
+{% endblock %}
+{% block content %}
+
+    <div class="masonry row cards-holder" style="position: relative">
+    {% for article in articles %}
+    <div class="col s12 m5 l3">
+      <div class="card medium gray">
+        <div class="card-image waves-effect waves-block waves-light">
+            <img class="activator" src="{{ article['urlToImage'] }}">
+        </div>
+        <div class="card-content">
+          <span class="card-title activator">{{ article['title'] }}<i class="material-icons right">more_vert</i></span>
+        </div>
+        <div class="card-action">
+            <a href="{{ url_for('ParsedData', title=article.news_id)}}">Read More</a>
+        </div>
+        <div class="card-reveal">
+            <span class="card-title grey-text text-darken-4">Abstract<i class="material-icons right">close</i></span>
+            <p>{{ article['description'] }}</p>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+    </div>
+
+{% endblock %}
