@@ -12,6 +12,7 @@ import re
 
 @app.route('/')
 def homepage():
+    user = user.get(1)
     print(user.tags)
     return render_template("index.html")
 
