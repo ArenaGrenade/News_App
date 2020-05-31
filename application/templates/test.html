@@ -1,0 +1,14 @@
+{% for message in get_flashed_messages() %}
+    <div style="color: green;">{{ message }}</div>
+{% endfor %}
+
+{% if current_user.is_authenticated %}
+    <h2>{{ current_user.username }}</h2>
+    {% if articles %}
+        {% for article in articles %}
+            <a href="{{ url_for('ParsedData', title=article.id)}}"><h3>{{ article.id }} - {{ article.link }}</h3></a>
+        {% endfor %}
+    {% endif %}
+{% else %}
+    <h2> No users logged in </h2>
+{% endif %}

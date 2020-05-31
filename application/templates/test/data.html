@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" href="data:,">
+    <meta charset="UTF-8">
+    <title>Parsed Data Test</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/news_api_tester.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <h1>{{Variable['Title']}}</h1>
+    <h3>{{Variable['Authors']}}</h3>
+    <ul>
+        {% for para in Variable['Content']%}
+        <li>{{para}}</li>
+        {% endfor %}
+    </ul>
+    {% if current_user.is_authenticated %}
+        {% if Variable.saved == false %}
+            <button class="favorite" name="{{ Variable.id }}">Bookmark</button>
+            <button class="unfavorite" name="{{ Variable.id }}" style="visibility: hidden"> Un-Bookmark </button>
+            <h2 class="handle" style="color: blue">test</h2>
+        {% else %}
+            <button class="favorite" name="{{ Variable.id }}" style="visibility: hidden">Bookmark</button>
+            <button class="unfavorite" name="{{ Variable.id }}"> Un-Bookmark </button>
+            <h2 style="color: blue;" class="handle">Saved! Hi</h2>
+        {% endif %}
+    {% else %}
+        <a href="{{ url_for('login') }}">Login to save articles</a>
+    {% endif %}
+</body>
+
+<script>
+    console.log('testing');
+    $(document).ready(function(){
+        console.log('Page is ready');
+        var clicked;
+        $(".favorite").click(function(){
+            console.log('favorite');
+            clicked = $(this).attr("name");
+            $.ajax({
+                type : 'POST',
+                url : "{{url_for('favorite_articles')}}",
+                data : {'data': clicked,
+                        'operation': 'save'
+                        },
+                success: function() {
+                    $(".favorite").css("visibility", "hidden");
+                    $(".unfavorite").css("visibility", "visible");
+                    console.log($(".handle"));
+                    $(".handle").html('SAVED!');
+                }
+            });
+        });
+        $(".unfavorite").click(function(){
+            console.log('unfavorite');
+            clicked = $(this).attr("name");
+            $.ajax({
+                type : 'POST',
+                url : "{{url_for('favorite_articles')}}",
+                data : {'data': clicked,
+                        'operation': 'unsave'
+                        },
+                success: function() {
+                    $(".favorite").css("visibility", "visible");
+                    $(".unfavorite").css("visibility", "hidden");
+                    $(".handle").html('UN-SAVED!');
+                }
+            });
+        });
+    });
+</script>
+
+</html>

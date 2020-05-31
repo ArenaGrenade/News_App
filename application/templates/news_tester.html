@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>News Api Test</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/news_api_tester.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+
+    <div class="row">
+        {% for article in articles %}
+        <div class="grid-item">
+            <div class="news_card">
+                <div class="container">
+                    <p><a href="{{ url_for('ParsedData', title=article.news_id)}}">{{ article.title }}(({{ article.news_id }}))</a>
+                        {% if article.saved %}
+                            Bookmarked!
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</body>
+
+
+</html>
