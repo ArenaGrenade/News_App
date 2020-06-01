@@ -26,7 +26,8 @@ class User(db.Model, UserMixin):
     saved_articles = db.relationship("NewsArticle", secondary=saved_articles,
                                      backref=db.backref('users'))
 
-    tags = association_proxy('user_tags', 'tag')
+    tags = association_proxy('user_tags', 'tag',
+                             creator=lambda tg: RelatedTags(tag=tg))
 
     def __repr__(self):
         return 'User(' + str(self.firstname) + ':' + str(self.id) + ')'
@@ -43,6 +44,7 @@ class User(db.Model, UserMixin):
         return self.saved_articles
 
 
+# Automatically hashes the password passed into user while attempting to create one
 @event.listens_for(User.password, 'set', retval=True)
 def hash_user_password(target, value, oldvalue, initiator):
     if value != oldvalue:
@@ -67,7 +69,8 @@ class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     tag = db.Column(db.String(100), nullable=False)
 
-    articles = association_proxy('user_list', 'user')
+    users = association_proxy('user_list', 'user',
+                              creator=lambda us: RelatedTags(user=us))
 
     def __init__(self, tag):
         self.tag = tag
@@ -76,19 +79,33 @@ class Tag(db.Model):
         return 'Tag(' + str(self.tag) + ':' + str(self.id) + ')'
 
 
+# MODELS THE M2M RELATIONSHIP BETWEEN USER AND TAG
+# ROHAN ASOKAN ASKED FOR THIS
+# EXAMPLE:
+# User user views an article tagged 'entertainment' with object named tag
+# This creates an relationship as so: [user <-- tag_count --> tag]
+# Where the tag_count tracks the number of articles with tag 'tag' has been
+# viewed by the user
+# --------------
+# 1) __init__ required when M2M is handled primarily in one direction (appending)
+# 2) Get rid of __init__ via the 'creator' argument passed into `association_proxy(...)`
+# 3) The parameter order in __init__ restricts bi-directionality
 class RelatedTags(db.Model):
     __tablename__ = "relatedtags"
     tag_id = db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), primary_key=True)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True)
-    tag_count = db.Column('tag_count', db.Integer)
+    tag_count = db.Column('tag_count', db.Integer, default=1)
 
     user = db.relationship("User", backref=db.backref("user_tags"))
-    tag = db.relationship("Tag", backref=db.backref("user_list", cascade="all, delete-orphan"))
+    # tag = db.relationship("Tag", backref=db.backref("user_list", cascade="all, delete-orphan"))
+    tag = db.relationship("Tag", backref=db.backref("user_list"))
 
-    def __init__(self, tag=None, user=None, tag_count=0):
-        self.user = user
-        self.tag = tag
-        self.tag_count = tag_count
+    # def __init__(self, tag=None, user=None, tag_count=0):
+    #     print(user)
+    #     self.user = user
+    #     self.tag = tag
+    #     self.tag_count = tag_count
+
 
     def __repr__(self):
-        return 'relating ' + str(self.tag) + ' to ' + str(self.article)
+        return 'relating ' + str(self.tag) + ' to ' + str(self.user)

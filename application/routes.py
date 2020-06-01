@@ -1,7 +1,7 @@
 from flask import request, render_template, redirect, flash, url_for, session, g
 from flask import current_app as app
 from flask_login import login_required, logout_user, current_user, login_user
-from .models import db, User, NewsArticle, Tag
+from .models import db, User, NewsArticle, Tag, RelatedTags
 from . import news_api_client
 from werkzeug.security import check_password_hash
 from . import login_manager
@@ -10,10 +10,48 @@ from newspaper import Article
 import re
 
 
+def user_tag_insert(user, tag):
+    rel_list = RelatedTags.query.filter_by(user=user).all()
+    for rel in rel_list:
+        if rel.tag_id == tag.id:
+            rel.tag_count = rel.tag_count + 1
+            db.session.commit()
+            return
+    user.tags.append(tag)
+    db.session.commit()
+
+
+def retrieve_user_tag_count(user, tag):
+    rel_list = RelatedTags.query.filter_by(user=user).all()
+    for rel in rel_list:
+        if rel.tag_id == tag.id:
+            return rel.tag_count
+
+    return -1
+
+
+# Don't remove the comments please
 @app.route('/')
 def homepage():
-    user = user.get(1)
-    print(user.tags)
+    # user = User.query.get(1)
+    # tag = Tag.query.get(1)
+    # user.tags.append(tag)
+    # db.session.commit()
+    # temp = RelatedTags.query.filter_by(user_id=1).first()
+    # print(temp.tag_count)
+    # print(user.tags)
+    # tag = Tag.query.get(1)
+    # user = User.query.get(2)
+    # tag.users.append(user)
+    # db.session.commit()
+
+    # -------------------------- THIS ONE -------------------------
+    # user = User.query.get(3)
+    # tag = Tag.query.get(3)
+    # user_tag_insert(user, tag)
+    # print('TAG ' + str(tag))
+    # print(tag.users)
+    # print(retrieve_user_tag_count(user, tag))
     return render_template("index.html")
 
 
